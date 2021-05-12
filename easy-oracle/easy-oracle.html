@@ -1,0 +1,86 @@
+<!-- #region Execution Node-->
+
+<script type="text/html" data-template-name="easy-oracle">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+        <label for="node-input-server"><i class="fa fa-tag"></i> Server</label>
+        <input type="text" id="node-input-server" placeholder="Server">
+    </div>
+</script>
+
+<script type="text/html" data-help-name="easy-oracle">
+    <p>Allows basic access to Oracle databases.</p>
+
+        <p>This node uses the query operation against the configured database. Currently supports SELECT operations.</p> 
+        
+        <p><code>msg.topic</code> of previous node must hold the query for the database, and the result is returned in <code>msg.payload</code>.</p>
+        
+        <p><code>msg.payload</code> will contain an object with two keys, <strong>metaData</strong> and <strong>rows</strong>. Rows key is an array of values.</p>
+        <p>If nothing is found for the query, an object with an empty rows array will be returned.</p>
+</script>
+
+
+<!-- #endregion -->
+
+<!-- #region Config Node-->
+
+<script type="text/html" data-template-name="easy-oracle-config">
+    <div class="form-row">
+        <label for="node-config-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-config-input-name">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-host"><i class="fa fa-server"></i> Host</label>
+        <input type="text" id="node-config-input-host">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-port"><i class="fa fa-paper-plane"></i> Port</label>
+        <input type="text" id="node-config-input-port">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-database"><i class="fa fa-database"></i> Database</label>
+        <input type="text" id="node-config-input-database">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-user"><i class="fa fa-user"></i> User</label>
+        <input type="text" id="node-config-input-user">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-password"><i class="fa fa-key"></i> Password</label>
+        <input type="password" id="node-config-input-password">
+    </div>
+</script>
+<!-- #endregion -->
+
+<script type="text/javascript">
+    RED.nodes.registerType('easy-oracle-config',{
+        category: 'config',
+        defaults: {
+            name: {value:"my-connection"},
+            host: {value:"localhost",required:true},
+            port: {value:1521,required:true,validate:RED.validators.number()},
+            database: {value:"orcl",required:true},
+            user: {value:"oracle",required:true},
+            password: {value:"oracle",required:true},
+        },
+        label: function() {
+            return this.name||"easy-oracle-config";
+        }
+    });
+    
+    RED.nodes.registerType('easy-oracle',{
+        category: 'storage',
+        color: '#fc2c03',
+        defaults: {
+            name: {value:""},
+            server: {value:"", type:"easy-oracle-config"}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "db.png",
+        label: function() {
+            return this.name||"easy-oracle";
+        }
+    });
+</script>
