@@ -1,10 +1,6 @@
 {
   "name": "node-red-contrib-easy-oracle",
-<<<<<<< HEAD
   "version": "1.0.1",
-=======
-  "version": "1.0.0",
->>>>>>> d1ea6c8923438ad8ecc957ed8f6b9e9acb61c737
   "description": "Easy to use Node-RED oracle database nodes",
   "main": "index.js",
   "scripts": {
