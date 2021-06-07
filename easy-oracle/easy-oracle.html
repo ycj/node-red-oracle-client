@@ -10,7 +10,16 @@
 </script>
 
 <script type="text/html" data-help-name="easy-oracle">
-    <p>A simple node that converts the message payloads into all lower-case characters</p>
+    <p>Allows basic access to Oracle databases.</p>
+
+        <p>This node uses the query operation against the configured database. Currently supports SELECT operations.</p> 
+        
+        <p><code>msg.topic</code> of previous node must hold the query for the database, and the result is returned in <code>msg.payload</code>.</p>
+        
+        <p><code>msg.payload</code> will contain an object with two keys, <strong>metaData</strong> and <strong>rows</strong>. Rows key is an array of values.</p>
+        <p>If nothing is found for the query, an object with an empty rows array will be returned.</p>
+
+        <p>Note: this package depends on <a href="https://oracle.github.io/node-oracledb">node-oracledb</a> so it depends on the Oracle Instant Client that needs to be installed as a prerequisite. Details of installation <a href="https://oracle.github.io/node-oracledb/INSTALL.html">here</a> and specifically for Linux, using zip file, <a href="https://oracle.github.io/node-oracledb/INSTALL.html#instzip">here</a>.</p>
 </script>
 
 

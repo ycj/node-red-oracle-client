@@ -9,8 +9,8 @@
   "keywords": [
     "node-red",
     "oracle",
-    "oracle",
-    "node",
+    "node-red oracle",
+    "easy-oracle",
     "oracledb"
   ],
   "author": "harp-code",
@@ -22,5 +22,9 @@
   },
   "dependencies": {
     "oracledb": "^5.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/harp-code/node-red-contrib-easy-oracle.git"
   }
 }
