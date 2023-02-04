@@ -12,7 +12,7 @@ module.exports = function(RED) {
         var node = this;
         node.server = RED.nodes.getNode(config.server);
 
-        node.on('input', async function(msg) {
+        node.on('input', async function(msg, send, done) {
 
             let connection;
 
@@ -40,13 +40,24 @@ module.exports = function(RED) {
                 result = await connection.execute(sql, binds, options);
                 msg.payload = result;
             } catch (err) {
-                node.error(err);
+				if(done){
+					done(err);
+				}
+				else {
+					node.error(err)
+				}
+					
             } finally {
                 if (connection) {
                     try {
                         await connection.close();
                     } catch (err) {
-                        node.error(err);
+						if(done){
+							done(err);
+						}
+						else {
+							node.error(err)
+						}
                     }
                 }
             }
