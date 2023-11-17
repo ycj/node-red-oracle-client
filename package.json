@@ -21,9 +21,6 @@
   "engines": {
     "node": ">=14.6.0"
   },
-  "dependencies": {
-    "oracledb": "^5.1.0"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/ycj/node-red-oracle-client.git"
@@ -36,5 +33,8 @@
     "chai": "^4.3.10",
     "mocha": "^10.2.0",
     "nyc": "^15.1.0"
+  },
+  "dependencies": {
+    "oracledb": "^6.2.0"
   }
 }
