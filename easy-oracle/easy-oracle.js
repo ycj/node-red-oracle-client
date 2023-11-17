@@ -7,11 +7,25 @@ module.exports = function(RED) {
     
     //#region Execution Node
     
+
+    const READ='READ';
+    const WRITE='WRITE';
+
     function EasyOracleExecutionNode(config) {
         RED.nodes.createNode(this,config);
         var node = this;
         node.server = RED.nodes.getNode(config.server);
 
+        // {
+        //     topic: 'select * from xxx where id=:id and name=:name',
+        //     payload: {
+        //         params: {
+        //             id: 1,
+        //             name: 'test'
+        //         },
+        //         mode: READ or WRITE
+        //     }
+        // }
         node.on('input', async function(msg, send, done) {
 
             let connection;
@@ -25,17 +39,23 @@ module.exports = function(RED) {
                     password: node.server.password,
                     connectString : `${node.server.host}:${node.server.port}/${node.server.database}`,
                     externalAuth  : false
-                  };
+                };
                 connection = await oracledb.getConnection(dbConfig);
 
-                binds = {};
+                if(msg.payload && msg.payload.params){
+                    binds = msg.payload.params;
+                }
+                else {
+                    binds = {};
+                }
 
                 options = {
-                outFormat: oracledb.OUT_FORMAT_OBJECT,   // query result format
-                // extendedMetaData: true,               // get extra metadata
-                // prefetchRows:     100,                // internal buffer allocation size for tuning
-                // fetchArraySize:   100                 // internal buffer allocation size for tuning
+                    outFormat: oracledb.OUT_FORMAT_OBJECT,
                 };
+
+                if(msg.payload && msg.payload.mode===WRITE){
+                    options.autoCommit = true;
+                }
 
                 result = await connection.execute(sql, binds, options);
                 msg.payload = result;
@@ -46,7 +66,6 @@ module.exports = function(RED) {
 				else {
 					node.error(err)
 				}
-					
             } finally {
                 if (connection) {
                     try {
@@ -79,18 +98,6 @@ module.exports = function(RED) {
 
     //#endregion
     
-    RED.nodes.registerType("easy-oracle",EasyOracleExecutionNode);
-    RED.nodes.registerType("easy-oracle-config",EasyOracleConfigNode);
-
+    RED.nodes.registerType("oracle",EasyOracleExecutionNode);
+    RED.nodes.registerType("oracle-config",EasyOracleConfigNode);
 }
-
-
-
-
-
-
-
-
-
-
-

@@ -1,3 +1,26 @@
+# 变更日志
+
+## 1.0.3
+
+支持增删改查全部DML操作
+
+# 兼容性说明
+
+When node-oracledb is used in the default **Thin mode**, it connects directly to the Oracle Database and does not require Oracle Client libraries. Connections in this mode can be made to Oracle Database 12.1 or later.
+
+When node-oracledb is in **Thick mode** using Oracle Client libraries, connections can be made to Oracle Database 9.2, or later, depending on the Oracle Client library version.
+
+* Oracle Client 21 can connect to Oracle Database 12.1 or later
+* Oracle Client 19, 18, and 12.2 can connect to Oracle Database 11.2 or later
+* Oracle Client 12.1 can connect to Oracle Database 10.2 or later
+* Oracle Client 11.2 can connect to Oracle Database 9.2 or later
+
+The diffrent between Thin mode and Thickmode [click me](https://node-oracledb.readthedocs.io/en/latest/user_guide/appendix_a.html#featuresummary)
+
+# Import
+
+This project is base on [node-red-contrib-easy-oracle](https://github.com/harp-code/node-red-contrib-easy-oracle).
+
 # node-red-contrib-easy-oracle
 Allows basic access to Oracle databases.
 
