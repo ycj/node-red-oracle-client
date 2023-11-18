@@ -1,8 +1,22 @@
+//  example
+//  {
+//     topic: 'select * from xxx where id=:id and name=:name',
+//     payload: {
+//         params: {
+//             id: 1,
+//             name: 'test'
+//         },
+//         options: {
+//             autoCommit: false
+//         }
+//     }
+// }
+
 //The function is called with a single argument, RED, that provides the module access to the Node-RED runtime api.
 module.exports = function(RED) {
     //#region requires
     const oracledb = require('oracledb')
-    oracledb.fetchAsString = [ oracledb.CLOB ];
+    oracledb.fetchAsString = [ oracledb.CLOB ]
 
     //#endregion
     
@@ -10,34 +24,33 @@ module.exports = function(RED) {
 
     function OracleExecNode(config) {
         RED.nodes.createNode(this,config);
-        var node = this;
+        const node = this;
         node.server = RED.nodes.getNode(config.server);
+        
+        let dbConfig =  {
+            user: node.server.user,
+            password: node.server.password,
+            connectString : `${node.server.host}:${node.server.port}/${node.server.database}`,
+            externalAuth  : false
+        };
+        
+        if(node.server.mode === 'thick'){
+            oracledb.initOracleClient({
+                libDir: node.server.instantClient
+            })
+        }
 
-        // {
-        //     topic: 'select * from xxx where id=:id and name=:name',
-        //     payload: {
-        //         params: {
-        //             id: 1,
-        //             name: 'test'
-        //         },
-        //         mode: READ or WRITE
-        //     }
-        // }
+        let connection
+        oracledb.getConnection(dbConfig).then(function(conn){
+            connection = conn;
+        }).catch(function(err){
+            node.error(err)
+        });
+
         node.on('input', async function(msg, send, done) {
-
-            let connection;
-
             try {
                 let sql = msg.topic;
                 let binds, options, result;
-
-                dbConfig =  {
-                    user: node.server.user,
-                    password: node.server.password,
-                    connectString : `${node.server.host}:${node.server.port}/${node.server.database}`,
-                    externalAuth  : false
-                };
-                connection = await oracledb.getConnection(dbConfig);
 
                 binds = {};
                 if(msg.payload && msg.payload.params){
