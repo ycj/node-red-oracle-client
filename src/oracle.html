@@ -4,22 +4,29 @@
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
         <label for="node-input-server"><i class="fa fa-tag"></i> Server</label>
         <input type="text" id="node-input-server" placeholder="Server">
     </div>
 </script>
 
-<script type="text/html" data-help-name="oracle">
-    <p>Allows basic access to Oracle databases.</p>
+<script type="text/markdown" data-help-name="oracle">
+Connect to an Oracle database and execute /select/insert/updata/delete.
 
-        <p>This node uses the query operation against the configured database. Currently supports SELECT operations.</p> 
-        
-        <p><code>msg.topic</code> of previous node must hold the query for the database, and the result is returned in <code>msg.payload</code>.</p>
-        
-        <p><code>msg.payload</code> will contain an object with two keys, <strong>metaData</strong> and <strong>rows</strong>. Rows key is an array of values.</p>
-        <p>If nothing is found for the query, an object with an empty rows array will be returned.</p>
+### Inputs
 
-        <p>Note: this package depends on <a href="https://oracle.github.io/node-oracledb">node-oracledb</a> so it depends on the Oracle Instant Client that needs to be installed as a prerequisite. Details of installation <a href="https://oracle.github.io/node-oracledb/INSTALL.html">here</a> and specifically for Linux, using zip file, <a href="https://oracle.github.io/node-oracledb/INSTALL.html#instzip">here</a>.</p>
+: *topic* (string) : The sql to execute
+: *payload.params* (object | array) : The parameters to use in the query. If an object is used, the keys must match the bind variables in the query. If an array is used, the order of the array must match the order of the bind variables in the query.
+: *payload.options* (object) : The options to use in the query. See [node-oracledb documentation](https://oracle.github.io/node-oracledb/doc/api.html#-141-execute) for more details.
+
+### Outputs
+
+: *payload* (object | array) : The result that sql was executed
+
+### Details
+
+It's needed to add `{ autoCommit: true }` to `payload.options` when execute insert/update/delete sql, the result is the number of rows affected. If the sql is select, the result is an array of objects.
 </script>
 
 
@@ -52,6 +59,17 @@
         <label for="node-config-input-password"><i class="fa fa-key"></i> Password</label>
         <input type="password" id="node-config-input-password">
     </div>
+    <div class="form-row">
+        <label for="node-config-input-mode"><i class="fa fa-key">Mode</i></label>
+        <select id="node-config-input-mode">
+            <option value="thin">Thin</option>
+            <option value="thick">Thick</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-instantClient"><i class="fa fa-key"></i> Instant Client Path</label>
+        <input type="text" id="node-config-input-instantClient">
+    </div>
 </script>
 <!-- #endregion -->
 
@@ -65,6 +83,8 @@
             database: {value:"orcl",required:true},
             user: {value:"oracle",required:true},
             password: {value:"oracle",required:true},
+            mode: {value:"thin", required:true},
+            instantClient: {value:"/opt/oracle/instantclient_19_8"},
         },
         label: function() {
             return this.name||"oracle-config";
