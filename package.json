@@ -15,7 +15,7 @@
   "node-red": {
     "version": ">=3.0.0",
     "nodes": {
-      "easy-oracle": "src/oracle.js"
+      "oracle-client": "src/oracle.js"
     }
   },
   "engines": {
@@ -30,9 +30,11 @@
     "access": "public"
   },
   "devDependencies": {
-    "chai": "^4.3.10",
     "mocha": "^10.2.0",
-    "nyc": "^15.1.0"
+    "node-red": "^3.1.0",
+    "node-red-node-test-helper": "^0.3.2",
+    "nyc": "^15.1.0",
+    "should": "^13.2.3"
   },
   "dependencies": {
     "oracledb": "^6.2.0"

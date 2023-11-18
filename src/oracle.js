@@ -1,3 +1,4 @@
+//The function is called with a single argument, RED, that provides the module access to the Node-RED runtime api.
 module.exports = function(RED) {
     //#region requires
     const oracledb = require('oracledb')
@@ -6,12 +7,8 @@ module.exports = function(RED) {
     //#endregion
     
     //#region Execution Node
-    
 
-    const READ='READ';
-    const WRITE='WRITE';
-
-    function EasyOracleExecutionNode(config) {
+    function OracleExecNode(config) {
         RED.nodes.createNode(this,config);
         var node = this;
         node.server = RED.nodes.getNode(config.server);
@@ -42,19 +39,22 @@ module.exports = function(RED) {
                 };
                 connection = await oracledb.getConnection(dbConfig);
 
+                binds = {};
                 if(msg.payload && msg.payload.params){
-                    binds = msg.payload.params;
-                }
-                else {
-                    binds = {};
+                    binds = {
+                        ...binds,
+                        ...msg.payload.params
+                    };
                 }
 
                 options = {
                     outFormat: oracledb.OUT_FORMAT_OBJECT,
-                };
-
-                if(msg.payload && msg.payload.mode===WRITE){
-                    options.autoCommit = true;
+                }
+                if(msg.payload && msg.payload.options){
+                    options = {
+                        ...options,
+                        ...msg.payload.options
+                    }
                 }
 
                 result = await connection.execute(sql, binds, options);
@@ -84,20 +84,23 @@ module.exports = function(RED) {
         });
     }
     //#endregion
-    
+
+
     //#region Config Node
     
-    function EasyOracleConfigNode(n) {
+    function OracleConfigNode(n) {
         RED.nodes.createNode(this,n);
         this.host = n.host;
         this.port = n.port;
         this.database = n.database;
         this.user = n.user;
         this.password = n.password;
+        this.mode=n.mode;
+        this.instantClient=n.instantClient;
     }
 
     //#endregion
     
-    RED.nodes.registerType("oracle",EasyOracleExecutionNode);
-    RED.nodes.registerType("oracle-config",EasyOracleConfigNode);
+    RED.nodes.registerType("oracle",OracleExecNode);
+    RED.nodes.registerType("oracle-config",OracleConfigNode);
 }

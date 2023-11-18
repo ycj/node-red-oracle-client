@@ -1,24 +1,29 @@
-const except = require('chai').expect
+const should = require('should')
 
 describe("测试oracle常用操作", ()=>{
-    let oracledb, conn
+    let conn
+
     before(async ()=>{
-        oracledb = require('oracledb')
+        let oracledb = require('oracledb')
         oracledb.initOracleClient({
             libDir: 'D:\\database-driver\\instantclient_19_21'
         })
-        conn = await oracledb.getConnection({
-            user: 'RCHC',
-            password: 'RCHC123',
-            connectString : '192.168.104.235:49161/xe'
-        })
-        except(conn).not.be.null
+        try{
+            conn = await oracledb.getConnection({
+                user: 'RCHC',
+                password: 'RCHC123',
+                connectString : '192.168.104.235:49161/xe'
+            })
+        }
+        catch(err){
+            console.error(err)
+        }
     })
 
     it("测试查询", async ()=>{
         let result = await conn.execute('select * from ZHZX.RED_TEST', {}, {outFormat: oracledb.OUT_FORMAT_OBJECT})
         console.log(result.rows)
-        except(result.rows.length>0).to.equal(true)
+        result.rows.length.should.be.above(0)
     })
 
     // it("自增序列", async ()=>{
@@ -30,7 +35,7 @@ describe("测试oracle常用操作", ()=>{
     it("测试插入", async ()=>{
         let result = await conn.execute("insert into ZHZX.RED_TEST (OBJ_ID, NAME, AGE) values (5, 'mysql', 10)", {}, {autoCommit: true})
         console.log(result)
-        except(result.rowsAffected).to.equal(1)
+        result.rowsAffected.should.be.equal(1)
     })
 
     // it("测试插入2"), async ()=>{
@@ -40,6 +45,6 @@ describe("测试oracle常用操作", ()=>{
     // }
 
     after(async ()=>{
-        await conn.close()
+        if(conn) await conn.close()
     })
 })
