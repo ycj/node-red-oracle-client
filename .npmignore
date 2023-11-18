@@ -1,1 +1,4 @@
 *.tgz
+coverage
+.nyc_output
+test
