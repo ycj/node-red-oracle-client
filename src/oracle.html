@@ -17,8 +17,7 @@ Connect to an Oracle database and execute /select/insert/updata/delete.
 ### Inputs
 
 : *topic* (string) : The sql to execute
-: *payload.params* (object | array) : The parameters to use in the query. If an object is used, the keys must match the bind variables in the query. If an array is used, the order of the array must match the order of the bind variables in the query.
-: *payload.options* (object) : The options to use in the query. See [node-oracledb documentation](https://oracle.github.io/node-oracledb/doc/api.html#-141-execute) for more details.
+: *payload* (object) : The params and options to use in the query.
 
 ### Outputs
 
@@ -26,9 +25,21 @@ Connect to an Oracle database and execute /select/insert/updata/delete.
 
 ### Details
 
+```javascript
+msg.topic = "insert into RED_TEST (ID, NAME, AGE) values (:id, :name, :age)"
+msg.payload = {
+    params: {
+        id: 33,
+        name: 'neo4j',
+        age: 4
+    },
+    options: {
+        autoCommit: true
+    }
+}
+```
 It's needed to add `{ autoCommit: true }` to `payload.options` when execute insert/update/delete sql, the result is the number of rows affected. If the sql is select, the result is an array of objects.
 </script>
-
 
 <!-- #endregion -->
 
@@ -84,7 +95,7 @@ It's needed to add `{ autoCommit: true }` to `payload.options` when execute inse
             user: {value:"oracle",required:true},
             password: {value:"oracle",required:true},
             mode: {value:"thin", required:true},
-            instantClient: {value:"/opt/oracle/instantclient_19_8"},
+            instantClient: {value:"/opt/oracle/instantclient_11_2"},
         },
         label: function() {
             return this.name||"oracle-config";
