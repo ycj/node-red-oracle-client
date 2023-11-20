@@ -47,38 +47,38 @@ It's needed to add `{ autoCommit: true }` to `payload.options` when execute inse
 
 <script type="text/html" data-template-name="oracle-config">
     <div class="form-row">
-        <label for="node-config-input-name"><i class="fa fa-tag"></i> Name</label>
+        <label for="node-config-input-name"><i class="fa fa-tag"></i>Name</label>
         <input type="text" id="node-config-input-name">
     </div>
     <div class="form-row">
-        <label for="node-config-input-host"><i class="fa fa-server"></i> Host</label>
+        <label for="node-config-input-host"><i class="fa fa-server"></i>Host</label>
         <input type="text" id="node-config-input-host">
     </div>
     <div class="form-row">
-        <label for="node-config-input-port"><i class="fa fa-paper-plane"></i> Port</label>
+        <label for="node-config-input-port"><i class="fa fa-paper-plane"></i>Port</label>
         <input type="text" id="node-config-input-port">
     </div>
     <div class="form-row">
-        <label for="node-config-input-database"><i class="fa fa-database"></i> Database</label>
+        <label for="node-config-input-database"><i class="fa fa-database"></i>Database</label>
         <input type="text" id="node-config-input-database">
     </div>
     <div class="form-row">
-        <label for="node-config-input-user"><i class="fa fa-user"></i> User</label>
+        <label for="node-config-input-user"><i class="fa fa-user"></i>User</label>
         <input type="text" id="node-config-input-user">
     </div>
     <div class="form-row">
-        <label for="node-config-input-password"><i class="fa fa-key"></i> Password</label>
+        <label for="node-config-input-password"><i class="fa fa-key"></i>Password</label>
         <input type="password" id="node-config-input-password">
     </div>
     <div class="form-row">
-        <label for="node-config-input-mode"><i class="fa fa-key">Mode</i></label>
+        <label for="node-config-input-mode"><i class="fa fa-tag">Mode</i></label>
         <select id="node-config-input-mode">
             <option value="thin">Thin</option>
             <option value="thick">Thick</option>
         </select>
     </div>
     <div class="form-row">
-        <label for="node-config-input-instantClient"><i class="fa fa-key"></i> Instant Client Path</label>
+        <label for="node-config-input-instantClient"><i class="fa fa-key"></i>Instant Client Path</label>
         <input type="text" id="node-config-input-instantClient">
     </div>
 </script>
@@ -99,6 +99,18 @@ It's needed to add `{ autoCommit: true }` to `payload.options` when execute inse
         },
         label: function() {
             return this.name||"oracle-config";
+        },
+        oneditprepare: function() {
+            let mode = $("#node-config-input-mode");
+            let instantClient = $("#node-config-input-instantClient");
+            mode.change(function() {
+                if (mode.val() == "thin") {
+                    instantClient.prop("disabled", true);
+                } else {
+                    instantClient.prop("disabled", false);
+                }
+            });
+            mode.change();
         }
     });
     
