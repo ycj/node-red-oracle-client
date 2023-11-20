@@ -78,7 +78,7 @@ It's needed to add `{ autoCommit: true }` to `payload.options` when execute inse
         </select>
     </div>
     <div class="form-row">
-        <label for="node-config-input-instantClient"><i class="fa fa-key"></i>Instant Client Path</label>
+        <label for="node-config-input-instantClient"><i class="fa fa-tag"></i>InstantClient</label>
         <input type="text" id="node-config-input-instantClient">
     </div>
 </script>
@@ -105,15 +105,16 @@ It's needed to add `{ autoCommit: true }` to `payload.options` when execute inse
             let instantClient = $("#node-config-input-instantClient");
             mode.change(function() {
                 if (mode.val() == "thin") {
-                    instantClient.prop("disabled", true);
-                } else {
-                    instantClient.prop("disabled", false);
+                    instantClient.hide();
+                } 
+                else {
+                    instantClient.show();
                 }
             });
             mode.change();
         }
     });
-    
+
     RED.nodes.registerType('oracle',{
         category: 'storage',
         color: '#fc2c03',
