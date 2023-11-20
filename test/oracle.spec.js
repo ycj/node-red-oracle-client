@@ -10,9 +10,9 @@ describe("测试oracle常用操作", ()=>{
         })
         try{
             conn = await oracledb.getConnection({
-                user: 'RCHC',
-                password: 'RCHC123',
-                connectString : '192.168.104.235:49161/xe'
+                user:           process.env.ORACLE_USER,
+                password:       process.env.ORACLE_PASSWORD,
+                connectString : process.env.ORACLE_URL
             })
         }
         catch(err){

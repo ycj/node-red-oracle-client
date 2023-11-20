@@ -3,3 +3,4 @@ coverage/
 *.tgz
 .nyc_output
 package-lock.json
+.env
