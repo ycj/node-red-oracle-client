@@ -47,6 +47,16 @@ module.exports = function(RED) {
             node.error(err)
         });
 
+        node.on('close', async ()=>{
+            if(connection){
+                try {
+                    await connection.close();
+                } catch (err) {
+                    node.error(err)
+                }
+            }
+        })
+
         node.on('input', async function(msg, send, done) {
             try {
                 let sql = msg.topic;
@@ -79,20 +89,8 @@ module.exports = function(RED) {
 				else {
 					node.error(err)
 				}
-            } finally {
-                if (connection) {
-                    try {
-                        await connection.close();
-                    } catch (err) {
-						if(done){
-							done(err);
-						}
-						else {
-							node.error(err)
-						}
-                    }
-                }
             }
+
             node.send(msg);
         });
     }
