@@ -1,6 +1,6 @@
 {
-  "name": "@hylink/node-red-oracle-client",
-  "version": "1.0.8",
+  "name": "@hylink/node-red-oracle",
+  "version": "1.0.1",
   "description": "Easy to use Node-RED oracle database nodes",
   "scripts": {
     "test": "mocha"

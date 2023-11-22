@@ -1,16 +1,8 @@
 # 变更日志
 
-## 1.0.8
+## 1.0.1
 
-重新发布
-
-## 1.0.4
-
-补充package.json元数据
-
-## 1.0.3
-
-支持增删改查全部DML操作
+node-red-oracle-client rename to node-red-oracle
 
 # 兼容性说明
 
